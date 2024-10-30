@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="hijo" src="./FT-MAN-04 Inspección de tanques.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe>
+
+  <button id="send">Mandar info</button>
+  <button id="extract">Extraer datos</button>
+  <button id="print">Imprimir</button>
+  <button id="disable">Deshabilitar</button>
+  <button id="enable">Habilitar</button>
+  <button id="zoom-in">Acercar</button>
+  <button id="zoom-out">Alejar</button>
+  
+  <script>
+    const ifr = document.getElementById('hijo')
+    const sendBtn = document.getElementById('send')
+    const extractBtn = document.getElementById('extract')
+    const printBtn = document.getElementById('print')
+    const enableBtn = document.getElementById('enable')
+    const disableBtn = document.getElementById('disable')
+    const zoomInBtn = document.getElementById('zoom-in')
+    const zoomOutBtn = document.getElementById('zoom-out')
+
+    sendBtn.addEventListener('click', (e) => {
+      const obj = {
+    "FT-MAN-18-img-001": true,
+    "FT-MAN-18-img-002": true,
+    "FT-MAN-18-img-003": true,
+    "FT-MAN-18-img-004": true,
+    "FT-MAN-18-img-005": true,
+    "FT-MAN-18-img-006": true,
+    "FT-MAN-18-img-007": true,
+    "FT-MAN-18-img-008": true,
+    "FT-MAN-18-ti-001": "",
+    "FT-MAN-18-ti-002": "",
+    "FT-MAN-18-ti-003": "",
+    "FT-MAN-18-ti-004": "",
+    "FT-MAN-18-ti-005": "",
+    "FT-MAN-18-ti-006": "",
+    "FT-MAN-18-ti-007": "",
+    "FT-MAN-18-ti-008": "",
+    "FT-MAN-18-ti-009": "",
+    "FT-MAN-18-ti-010": "",
+    "FT-MAN-18-ti-011": "",
+    "FT-MAN-18-ti-012": "",
+    "FT-MAN-18-ti-013": "",
+    "FT-MAN-18-ti-014": "",
+    "FT-MAN-18-ti-015": "",
+    "FT-MAN-18-ti-016": "",
+    "FT-MAN-18-ti-017": "",
+    "FT-MAN-18-ti-018": "",
+    "FT-MAN-18-ti-019": "",
+    "FT-MAN-18-ti-020": "",
+    "FT-MAN-18-ti-021": "",
+    "FT-MAN-18-ti-022": "",
+    "FT-MAN-18-ti-023": "",
+    "FT-MAN-18-ti-024": "",
+    "FT-MAN-18-ti-025": "",
+    "FT-MAN-18-ti-026": "",
+    "FT-MAN-18-ti-027": "",
+    "FT-MAN-18-ti-028": "",
+    "FT-MAN-18-ti-029": "",
+    "FT-MAN-18-ti-030": "",
+    "FT-MAN-18-ti-031": "",
+    "FT-MAN-18-ti-032": "",
+    "FT-MAN-18-ti-033": "",
+    "FT-MAN-18-ti-034": "",
+    "FT-MAN-18-ti-035": "",
+    "FT-MAN-18-ti-036": "",
+    "FT-MAN-18-ti-037": "",
+    "FT-MAN-18-ti-038": "",
+    "FT-MAN-18-ti-039": "",
+    "FT-MAN-18-ti-040": "",
+    "FT-MAN-18-ti-041": "",
+    "FT-MAN-18-ti-042": "",
+    "FT-MAN-18-ti-043": "",
+    "FT-MAN-18-ti-044": "",
+    "FT-MAN-18-ti-045": "",
+    "FT-MAN-18-ti-046": "",
+    "FT-MAN-18-ti-047": "",
+    "FT-MAN-18-ti-048": "",
+    "FT-MAN-18-ti-049": "",
+    "FT-MAN-18-ti-050": "",
+    "FT-MAN-18-ti-051": "",
+    "FT-MAN-18-ti-052": "",
+    "FT-MAN-18-ti-053": "",
+    "FT-MAN-18-ti-054": "",
+    "FT-MAN-18-ti-055": "",
+    "FT-MAN-18-cb-001": false,
+    "FT-MAN-18-cb-002": false,
+    "FT-MAN-18-cb-003": false,
+    "FT-MAN-18-cb-004": false,
+    "FT-MAN-18-cb-005": false,
+    "FT-MAN-18-cb-006": false,
+    "FT-MAN-18-cb-007": false,
+    "FT-MAN-18-cb-008": false,
+    "FT-MAN-18-cb-009": false,
+    "FT-MAN-18-cb-010": false,
+    "FT-MAN-18-cb-011": false,
+    "FT-MAN-18-cb-012": false,
+    "FT-MAN-18-cb-013": false,
+    "FT-MAN-18-cb-014": false,
+    "FT-MAN-18-cb-015": false,
+    "FT-MAN-18-cb-016": false,
+    "FT-MAN-18-cb-017": false,
+    "FT-MAN-18-cb-018": false,
+    "FT-MAN-18-di-001": "",
+    "FT-MAN-18-di-002": "",
+    "FT-MAN-18-di-003": "",
+    "FT-MAN-18-di-004": "",
+    "FT-MAN-18-di-005": "",
+    "FT-MAN-18-di-006": "",
+    "FT-MAN-18-di-007": "",
+    "FT-MAN-18-di-008": "",
+    "FT-MAN-18-di-009": "",
+    "FT-MAN-18-di-010": "",
+    "FT-MAN-18-di-011": "",
+    "FT-MAN-18-di-012": "",
+    "FT-MAN-18-di-013": "",
+    "FT-MAN-18-di-014": "",
+    "FT-MAN-18-di-015": "",
+    "FT-MAN-18-di-016": "",
+    "FT-MAN-18-di-017": "",
+    "FT-MAN-18-di-018": "",
+    "FT-MAN-18-di-019": "",
+    "FT-MAN-18-di-020": "",
+    "FT-MAN-18-di-021": "",
+    "FT-MAN-18-di-022": "",
+    "FT-MAN-18-di-023": "",
+    "FT-MAN-18-di-024": "",
+    "FT-MAN-18-di-025": "",
+    "FT-MAN-18-di-026": "",
+    "FT-MAN-18-di-027": "",
+    "FT-MAN-18-di-028": "",
+    "FT-MAN-18-di-029": "",
+    "FT-MAN-18-di-030": "",
+    "FT-MAN-18-di-031": "",
+    "FT-MAN-18-di-032": "",
+    "FT-MAN-18-di-033": "",
+    "FT-MAN-18-di-034": "",
+    "FT-MAN-18-di-035": "",
+    "FT-MAN-18-di-036": "",
+    "FT-MAN-18-di-037": "",
+    "FT-MAN-18-tmi-001": "",
+    "FT-MAN-18-tmi-002": "",
+    "FT-MAN-18-sc-001": "1",
+    "FT-MAN-18-sc-002": "1",
+    "FT-MAN-18-sc-003": "1",
+    "FT-MAN-18-sc-004": "1",
+    "FT-MAN-18-sc-005": "1",
+    "FT-MAN-18-sc-006": "1",
+    "FT-MAN-18-sc-007": "1",
+    "FT-MAN-18-sc-008": "1",
+    "FT-MAN-18-sc-009": "1",
+    "FT-MAN-18-sc-010": "1",
+    "FT-MAN-18-sc-011": "1",
+    "FT-MAN-18-sc-012": "1",
+    "FT-MAN-18-sc-013": "1",
+    "FT-MAN-18-sc-014": "1",
+    "FT-MAN-18-sc-015": "1",
+    "FT-MAN-18-sc-016": "1",
+    "FT-MAN-18-sc-017": "1",
+    "FT-MAN-18-sc-018": "1",
+    "FT-MAN-18-sc-019": "1",
+    "FT-MAN-18-sc-020": "1",
+    "FT-MAN-18-sc-021": "1",
+    "FT-MAN-18-sc-022": "1",
+    "FT-MAN-18-sc-023": "1",
+    "FT-MAN-18-sc-024": "1",
+    "FT-MAN-18-sc-025": "1",
+    "FT-MAN-18-sc-026": "1",
+    "FT-MAN-18-sc-027": "1",
+    "FT-MAN-18-sc-028": "1",
+    "FT-MAN-18-sc-029": "1",
+    "FT-MAN-18-sc-030": "1",
+    "FT-MAN-18-sc-031": "1",
+    "FT-MAN-18-sc-032": "1",
+    "FT-MAN-18-sc-033": "1",
+    "FT-MAN-18-sc-034": "1",
+    "FT-MAN-18-sc-035": "1",
+    "FT-MAN-18-sc-036": "1",
+    "FT-MAN-18-sc-037": "1",
+    "FT-MAN-18-sc-038": "1",
+    "FT-MAN-18-sc-039": "1",
+    "FT-MAN-18-sc-040": "1",
+    "FT-MAN-18-sc-041": "1",
+    "FT-MAN-18-sc-042": "1",
+    "FT-MAN-18-sc-043": "1",
+    "FT-MAN-18-sc-044": "1",
+    "FT-MAN-18-sc-045": "1",
+    "FT-MAN-18-sc-046": "1",
+    "FT-MAN-18-sc-047": "1",
+    "FT-MAN-18-sc-048": "1",
+    "FT-MAN-18-sc-049": "1",
+    "FT-MAN-18-sc-050": "1",
+    "FT-MAN-18-sc-051": "1",
+    "FT-MAN-18-sc-052": "1",
+    "FT-MAN-18-sc-053": "1",
+    "FT-MAN-18-sc-054": "1"
+}
+
+      const message = {
+        sender: 'SoftOil',
+        type: 'set-data',
+        fields: JSON.stringify({})
+      }
+
+      ifr.contentWindow.postMessage(message)
+    })
+
+    extractBtn.addEventListener('click', (e) => {
+      const message = {
+        sender: 'SoftOil',
+        type: 'extract-data'
+      }
+      ifr.contentWindow.postMessage(message)
+    })
+
+    printBtn.addEventListener('click', e => {
+      const message = {
+        sender: 'SoftOil',
+        type: 'print'
+      }
+      ifr.contentWindow.postMessage(message)
+    })
+
+    enableBtn.addEventListener('click', e => {
+      const message = {
+        sender: 'SoftOil',
+        type: 'enable-doc'
+      }
+      ifr.contentWindow.postMessage(message)
+    })
+
+    disableBtn.addEventListener('click', e => {
+      const message = {
+        sender: 'SoftOil',
+        type: 'disable-doc'
+      }
+      ifr.contentWindow.postMessage(message)
+    })
+
+    zoomInBtn.addEventListener('click', e => {
+      const message = {
+        sender: 'SoftOil',
+        type: 'zoom-in'
+      }
+      ifr.contentWindow.postMessage(message)
+    })
+
+    zoomOutBtn.addEventListener('click', e => {
+      const message = {
+        sender: 'SoftOil',
+        type: 'zoom-out'
+      }
+      ifr.contentWindow.postMessage(message)
+    })
+
+    window.addEventListener('message', (e) => {
+      if(e.data.sender !== 'SoftOil') return
+
+      console.log('extracted data =>', e.data)
+    })
+  </script>
+</body>
+</html>
