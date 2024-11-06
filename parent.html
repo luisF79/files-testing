@@ -13,7 +13,8 @@
   </style>
 </head>
 <body>
-  <iframe id="hijo" src="./FT-MAN-04 Inspección de tanques.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe>
+  <iframe id="hijo" src="./FT-SEG-05-Listado de codigos de estandares.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe>
+  <!-- <iframe id="hijo" src="./FT-MAN-04 Inspección de tanques.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe> -->
 
   <button id="send">Mandar info</button>
   <button id="extract">Extraer datos</button>
@@ -22,6 +23,8 @@
   <button id="enable">Habilitar</button>
   <button id="zoom-in">Acercar</button>
   <button id="zoom-out">Alejar</button>
+  <button id="set-doc-info">Setear headers</button>
+  <button id="reload">Recargar</button>
   
   <script>
     const ifr = document.getElementById('hijo')
@@ -32,6 +35,7 @@
     const disableBtn = document.getElementById('disable')
     const zoomInBtn = document.getElementById('zoom-in')
     const zoomOutBtn = document.getElementById('zoom-out')
+    const setDocInfo = document.getElementById('set-doc-info')
 
     sendBtn.addEventListener('click', (e) => {
       const obj = {
@@ -268,11 +272,29 @@
       ifr.contentWindow.postMessage(message)
     })
 
+    setDocInfo.addEventListener('click', e => {
+      const message = {
+        sender: 'SoftOil',
+        type: 'set-doc-info',
+        docInfo: {
+          stationName: 'Estación de Servicio S.A de C.V.',
+          stationAddress: 'Avenida No. Colonia. Nombre, C.P. 10000, Municipio, Edo.',
+          stationPermit: 'PERMISO CRE: PL/12345/ES/EXP/2015',
+          // stationLogo: 'https://softoil-sgo.s3.us-east-2.amazonaws.com/assets/6c127e4c-d456-48e8-b8e0-a8ea092394e9-logo_fletes_togo.png'
+          stationLogo: '/img/Softoil.svg'
+        }
+      }
+      ifr.contentWindow.postMessage(message)
+    })
+
     window.addEventListener('message', (e) => {
       if(e.data.sender !== 'SoftOil') return
 
       console.log('extracted data =>', e.data)
     })
+
+    const reloadBtn = document.getElementById('reload')
+    reloadBtn.addEventListener('click', () => { window.location.reload() })
   </script>
 </body>
 </html>
