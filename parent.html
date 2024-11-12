@@ -24,6 +24,7 @@
   <button id="zoom-in">Acercar</button>
   <button id="zoom-out">Alejar</button>
   <button id="set-doc-info">Setear headers</button>
+  <button id="sign">Firmar</button>
   <button id="reload">Recargar</button>
   
   <script>
@@ -36,6 +37,7 @@
     const zoomInBtn = document.getElementById('zoom-in')
     const zoomOutBtn = document.getElementById('zoom-out')
     const setDocInfo = document.getElementById('set-doc-info')
+    const signBtn = document.getElementById('sign')
 
     sendBtn.addEventListener('click', (e) => {
       const obj = {
@@ -218,7 +220,9 @@
       const message = {
         sender: 'SoftOil',
         type: 'set-data',
-        fields: JSON.stringify({})
+        fields: JSON.stringify({
+          sign: 'https://softoil-sgo.s3.us-east-2.amazonaws.com/assets/2136231f-b480-4fc4-b402-8c9f9183c2b9-firma_recortada.png'
+        })
       }
 
       ifr.contentWindow.postMessage(message)
@@ -283,6 +287,16 @@
           // stationLogo: 'https://softoil-sgo.s3.us-east-2.amazonaws.com/assets/6c127e4c-d456-48e8-b8e0-a8ea092394e9-logo_fletes_togo.png'
           stationLogo: '/img/Softoil.svg'
         }
+      }
+      ifr.contentWindow.postMessage(message)
+    })
+
+    signBtn.addEventListener('click', e => {
+      const message = {
+        sender: 'SoftOil',
+        type: 'sign',
+        // signImg: '/img/firma.png'
+        signImg: 'https://softoil-sgo.s3.us-east-2.amazonaws.com/assets/2136231f-b480-4fc4-b402-8c9f9183c2b9-firma_recortada.png'
       }
       ifr.contentWindow.postMessage(message)
     })
