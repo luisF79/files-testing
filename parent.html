@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +12,19 @@
       box-sizing: border-box;
     }
   </style>
+  <script src="https://unpkg.com/@alenaksu/json-viewer@2.1.0/dist/json-viewer.bundle.js"></script>
 </head>
+
 <body>
   <!-- <iframe id="hijo" src="./formatos/FT-SEG-05-Listado de codigos de estandares.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe> -->
   <!-- <iframe id="hijo" src="./formatos/FT-GEN-01.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe> -->
-  <!-- <iframe id="hijo" src="./formatos/FT-MAN-04 Inspección de tanques.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe> -->
-  <iframe id="hijo" src="./formatos/FT-MAN-03 Inspeccion de dispensarios.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe>
+  <iframe id="hijo" src="./formatos/FT-MAN-04 Inspección de tanques.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe>
+  <!-- <iframe id="hijo" src="./formatos/FT-MAN-03 Inspeccion de dispensarios.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe> -->
+  <!-- <iframe id="hijo" src="./formatos/PR-MAN-06-Mantenimiento-de-Drenajes.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe> -->
+  <!-- <iframe id="hijo" src="./formatos/FT-OPE-03-Cambio-de-precios.html" frameborder="0" style="width: 100vw; height: 600px;"></iframe> -->
 
   <button id="send">Mandar info</button>
+  <button id="send-table-data">Llenar tablas</button>
   <button id="extract">Extraer datos</button>
   <button id="print">Imprimir</button>
   <button id="disable">Deshabilitar</button>
@@ -26,13 +32,31 @@
   <button id="zoom-in">Acercar</button>
   <button id="zoom-out">Alejar</button>
   <button id="set-doc-info">Setear headers</button>
-  <button id="sign">Firmar</button>
   <button id="go-bottom">Ir al fondo</button>
   <button id="reload">Recargar</button>
-  
+
+  <json-viewer id="json"></json-viewer>
+
   <script>
+    // declare all document event types
+    const eventTypes = {
+      PRINT: 'print',
+      SET_DATA: 'set-data',
+      SET_TABLES_DATA: 'set-tables-data',
+      REQUEST_TABLES_DATA: 'request-tables-data',
+      EXTRACT_DATA: 'extract-data',
+      DISABLE_DOC: 'disable-doc',
+      ENABLE_DOC: 'enable-doc',
+      ZOOM_IN: 'zoom-in',
+      ZOOM_OUT: 'zoom-out',
+      SET_DOC_HEADERS: 'set-doc-headers',
+      SIGN: 'sign'
+    }
+
+
     const ifr = document.getElementById('hijo')
     const sendBtn = document.getElementById('send')
+    const sendTableDataBtn = document.getElementById('send-table-data')
     const extractBtn = document.getElementById('extract')
     const printBtn = document.getElementById('print')
     const enableBtn = document.getElementById('enable')
@@ -40,26 +64,109 @@
     const zoomInBtn = document.getElementById('zoom-in')
     const zoomOutBtn = document.getElementById('zoom-out')
     const setDocInfo = document.getElementById('set-doc-info')
-    const signBtn = document.getElementById('sign')
 
-    sendBtn.addEventListener('click', (e) => {
-      const obj = {}
+    const sendTablesData = () => {
+      const obj = {
+        dispatcherRows: [
+          {
+            "brand": "marca 1",
+            "model": "modelo 1",
+            "serialNumber": "HFEN123456",
+            "approvalNumber": "asd123"
+          },
+          {
+            "brand": "marca 2",
+            "model": "modelo 2",
+            "serialNumber": "12345asd",
+            "approvalNumber": "asd123"
+          },
+          {
+            "brand": "marca 3",
+            "model": "modelo 3",
+            "serialNumber": "12345asd",
+            "approvalNumber": "asd123"
+          },
+          {
+            "brand": "marca 4",
+            "model": "modelo 4",
+            "serialNumber": "12345asd",
+            "approvalNumber": "asd123"
+          },
+        ],
+        priceChange: {
+          date: '12/12/12',
+          time: '18:55',
+          regularPrice: '25.14',
+          premiumPrice: '25',
+          dieselPrice: '25',
+          creFolio: '1234ASDF',
+          personWhoVerifies: 'Mario Jesús Contreras Sanchez'
+        },
+        priceChangeLogRows: [
+          {
+            dispatcherNumber: 1,
+            dispatcherSide: 2,
+            meterSerialNumber: '123ASD',
+            product: 'Regular',
+            tag: 'DISP-001-MANG-001',
+            dateTime: '00/00/00 00:00',
+            creFolio: '3BF66AA6',
+            eventFormat: 'CAMP2411201530L1P1CU23.59'
+          },
+          {
+            dispatcherNumber: 2,
+            dispatcherSide: 1,
+            meterSerialNumber: '123ASD',
+            product: 'Prémium',
+            tag: 'DISP-001-MANG-001',
+            dateTime: '00/00/00 00:00',
+            creFolio: '3BF66AA6',
+            eventFormat: 'CAMP2411201530L1P1CU23.59'
+          },
+          {
+            dispatcherNumber: 1,
+            dispatcherSide: 2,
+            meterSerialNumber: '123ASD',
+            product: 'Diésel',
+            tag: 'DISP-001-MANG-001',
+            dateTime: '00/00/00 00:00',
+            creFolio: '3BF66AA6',
+            eventFormat: 'CAMP2411201530L1P1CU23.59'
+          },
+        ]
+      }
 
       const message = {
         sender: 'SoftOil',
-        type: 'set-data',
-        fields: JSON.stringify({
-          sign: 'https://softoil-sgo.s3.us-east-2.amazonaws.com/assets/2136231f-b480-4fc4-b402-8c9f9183c2b9-firma_recortada.png'
-        })
+        type: eventTypes.SET_TABLES_DATA,
+        fields: JSON.stringify(obj)
       }
 
+      ifr.contentWindow.postMessage(message)
+    }
+
+    sendTableDataBtn.addEventListener('click', (e) => {
+      sendTablesData()
+    })
+
+    sendBtn.addEventListener('click', (e) => {
+      const fields = {
+        sign: '/img/firma_recortada.png',
+        'FT-OPE-03-ti-01': 'Mario Jesús Contreras Sánchez'
+      }
+
+      const message = {
+        sender: 'SoftOil',
+        type: eventTypes.SET_DATA,
+        fields: JSON.stringify(fields)
+      }
       ifr.contentWindow.postMessage(message)
     })
 
     extractBtn.addEventListener('click', (e) => {
       const message = {
         sender: 'SoftOil',
-        type: 'extract-data'
+        type: eventTypes.EXTRACT_DATA
       }
       ifr.contentWindow.postMessage(message)
     })
@@ -67,7 +174,7 @@
     printBtn.addEventListener('click', e => {
       const message = {
         sender: 'SoftOil',
-        type: 'print'
+        type: eventTypes.PRINT
       }
       ifr.contentWindow.postMessage(message)
     })
@@ -75,7 +182,7 @@
     enableBtn.addEventListener('click', e => {
       const message = {
         sender: 'SoftOil',
-        type: 'enable-doc'
+        type: eventTypes.ENABLE_DOC
       }
       ifr.contentWindow.postMessage(message)
     })
@@ -83,7 +190,7 @@
     disableBtn.addEventListener('click', e => {
       const message = {
         sender: 'SoftOil',
-        type: 'disable-doc'
+        type: eventTypes.DISABLE_DOC
       }
       ifr.contentWindow.postMessage(message)
     })
@@ -91,7 +198,7 @@
     zoomInBtn.addEventListener('click', e => {
       const message = {
         sender: 'SoftOil',
-        type: 'zoom-in'
+        type: eventTypes.ZOOM_IN
       }
       ifr.contentWindow.postMessage(message)
     })
@@ -99,7 +206,7 @@
     zoomOutBtn.addEventListener('click', e => {
       const message = {
         sender: 'SoftOil',
-        type: 'zoom-out'
+        type: eventTypes.ZOOM_OUT
       }
       ifr.contentWindow.postMessage(message)
     })
@@ -107,8 +214,9 @@
     setDocInfo.addEventListener('click', e => {
       const message = {
         sender: 'SoftOil',
-        type: 'set-doc-info',
-        docInfo: {
+        // type: 'set-doc-info',
+        type: eventTypes.SET_DOC_HEADERS,
+        docHeaders: {
           stationName: 'Estación de Servicio S.A de C.V.',
           stationAddress: 'Avenida No. Colonia. Nombre, C.P. 10000, Municipio, Edo.',
           stationPermit: 'PERMISO CRE: PL/12345/ES/EXP/2015',
@@ -119,20 +227,36 @@
       ifr.contentWindow.postMessage(message)
     })
 
-    signBtn.addEventListener('click', e => {
+    const signDoc = (elem) => {
       const message = {
         sender: 'SoftOil',
-        type: 'sign',
-        signImg: '/img/firma_recortada.png'
-        // signImg: 'https://images.unsplash.com/photo-1421790500381-fc9b5996f343?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3'
+        type: eventTypes.SIGN,
+        signImg: '../img/firma_recortada.png',
+        // signImg: 'https://images.unsplash.com/photo-1 421790500381-fc9b5996f343?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3'
+        element: elem
       }
+
       ifr.contentWindow.postMessage(message)
-    })
+    }
 
     window.addEventListener('message', (e) => {
-      if(e.data.sender !== 'SoftOil') return
+      if (e.data.sender !== 'SoftOil') return
 
-      console.log('extracted data =>', e.data)
+      if (e.data.type === eventTypes.EXTRACT_DATA) {
+        document.querySelector('#json').data = e.data;
+      }
+
+      if (e.data.type === eventTypes.SIGN) {
+        const target = e.data.element
+        if (confirm('¿Está seguro de firmar?')) {
+          signDoc(target)
+        }
+      }
+
+      if (e.data.type === eventTypes.REQUEST_TABLES_DATA) {
+        sendTablesData()
+      }
+
     })
 
     const ifrGoBottom = () => {
@@ -143,11 +267,12 @@
     const goBottomBtn = document.getElementById('go-bottom')
     reloadBtn.addEventListener('click', () => { window.location.reload() })
     goBottomBtn.addEventListener('click', ifrGoBottom)
-    
+
     // Para ir al final del documento automáticamente
     // setTimeout(() => {
     //   ifrGoBottom()
-    // }, 100)
+    // }, 500)
   </script>
 </body>
+
 </html>

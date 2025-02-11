@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FT-OPE-03 Cambio de precios</title>
+  <script src="/ft-ope-03.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    html,
+    body {
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #7f7f7f;
+    }
+
+    .page {
+      width: 21.59cm;
+      height: 27.94cm;
+      max-width: 21.59cm;
+      max-height: 27.94cm;
+      background-color: white;
+      margin: 10px auto;
+      padding: 1.41cm 1.27cm;
+      position: relative;
+      overflow: hidden;
+    }
+
+
+    input {
+      border: none;
+      width: auto;
+      background-color: transparent;
+    }
+
+    div input[type="text"] {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      vertical-align: top;
+      font-size: 10px;
+      font-family: 'calibri';
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      border-bottom: 4px solid #adb5bd;
+      margin-top: 10px;
+      padding: 0 20px;
+      page-break-before: always;
+      width: 100%;
+    }
+
+    .h-data {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 5px;
+      width: 60%;
+    }
+
+    .doc-title {
+      font-size: 10pt;
+      font-weight: bold;
+      color: #0070c0;
+      width: 100%;
+      text-align: center;
+    }
+
+    .station-logo {
+      height: 50px;
+      width: auto;
+      max-width: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .station-name,
+    .station-address,
+    .station-permit {
+      width: 100%;
+      color: #000;
+      text-align: center;
+    }
+
+    .station-name {
+      font-weight: bold;
+      font-size: 11pt;
+    }
+
+    .station-address,
+    .station-permit {
+      font-size: 9pt;
+    }
+
+    .logo-container {
+      height: 1.44cm;
+      width: 20%;
+    }
+
+    .logo-container:has(.station-logo) {
+      display: flex;
+      justify-content: start;
+    }
+
+    .logo-container:has(svg) {
+      display: flex;
+      justify-content: end;
+    }
+
+    svg {
+      height: 100%;
+    }
+
+    .content {
+      display: flex;
+      height: 877px;
+      max-height: 877px;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+      margin-top: 20px;
+    }
+
+    table {
+      table-layout: fixed;
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    td,
+    th {
+      border: 1px solid black;
+      padding: 4px 2px !important;
+      word-break: normal;
+      font-size: 8px;
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      display: block;
+      border: none;
+      overflow: hidden;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      font-size: 10px;
+      resize: none;
+    }
+
+    textarea:focus-visible {
+      outline: solid 1px #b8b8b8;
+    }
+
+    textarea:disabled {
+      color: #000;
+    }
+
+    #FT-OPE-03-table-dispatchers th {
+      background-color: #DEEAF6;
+    }
+
+    #FT-OPE-03-table-dispatchers th,
+    #FT-OPE-03-table-dispatchers td {
+      font-size: 8pt;
+      font-weight: bold;
+      height: 25px;
+      padding: 5px 10px;
+    }
+
+    #FT-OPE-03-table-price-changes {
+      margin-top: 15px;
+    }
+
+    #FT-OPE-03-table-price-changes th {
+      background-color: #DEEAF6;
+    }
+
+    #FT-OPE-03-table-price-changes th,
+    #FT-OPE-03-table-price-changes td {
+      font-size: 8pt;
+      font-weight: bold;
+      height: 20px;
+      padding: 5px 10px;
+    }
+
+    #FT-OPE-03-table-price-change-log th {
+      background-color: #DEEAF6;
+    }
+
+    .sign-section {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .sign-container {
+      margin-top: 10px;
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sign {
+      width: 100%;
+      height: 60px;
+      background: #00000010;
+      cursor: pointer;
+    }
+
+    .sign-container>input[type=text] {
+      width: 100%;
+      height: 20px;
+      font-size: 16px;
+      text-align: center;
+      border-bottom: 1px solid black;
+    }
+
+    .sign-container p {
+      font-size: 16px;
+      text-align: center;
+    }
+
+    img[class^=sign] {
+      object-fit: contain;
+    }
+
+    .footer {
+      border-top: 3px solid #adadae;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-top: auto;
+      position: absolute;
+      bottom: 0;
+    }
+
+    .footer-data-left {
+      height: 65px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      justify-content: center;
+    }
+
+    .footer-data-left>div {
+      display: flex;
+      gap: 5px;
+    }
+
+    .footer-data-left>div>p {
+      font-size: 12px;
+      width: 90px;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-data-left>div>p:nth-child(1) {
+      font-weight: bold;
+    }
+
+    .footer-data-right {
+      width: 150px;
+      height: 65px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: #a1a0a3;
+    }
+
+
+    @media print {
+      @page {
+        size: 8.5in 11in;
+        page-orientation: portrait;
+        margin: 0;
+      }
+
+      .page {
+        font-family: Arial, Helvetica, sans-serif;
+        width: 21.59cm;
+        height: 27.94cm;
+        max-width: 21.59cm;
+        max-height: 27.94cm;
+        background-color: white;
+        margin: 0;
+        padding: 1.41cm 1.27cm;
+        position: relative;
+        overflow: hidden;
+      }
+
+      input[type="date"]::-webkit-inner-spin-button,
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+      }
+
+      input[type="time"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header>
+      <div class="logo-container">
+        <img src="" class="station-logo">
+      </div>
+      <article class="h-data">
+        <input class="station-name" disabled />
+        <input class="station-address" disabled />
+        <input class="station-permit" disabled />
+        <p class="doc-title">CAMBIO DE PRECIOS</p>
+      </article>
+      <div class="logo-container">
+        <svg version="1.1" id="SGO" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px" y="0px" viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
+          <style type="text/css">
+            .st0 {
+              fill: #0276C7;
+            }
+
+            .st1 {
+              fill: #7F7F7F;
+            }
+          </style>
+          <g>
+            <path class="st0" d="M44.5,80.1c2.7,0,8.6,0.3,11.2,8.8h7.7c0-4.4-6.5-13.4-18.1-13.4c-7,0-19.3,2.3-19.3,14.1
+                  c0,13.7,26.4,14.3,26.4,25.7c0,4-4.2,6.3-7.8,6.3s-10.7-2.2-10.7-8.8h-8.7c0,5.4,4.6,14,19.5,14c14.1,0,18.8-8.2,18.8-14.5
+                  c0-13.3-27.1-15.3-27.1-25.5C36.4,81,41.8,80,44.5,80.1L44.5,80.1z"></path>
+            <path class="st0" d="M103.8,81.5c7.2,0,12.9,5.5,16.2,10.4c0,0,3.3-3.1,4.9-4.8c-2.3-2.9-9.4-11.8-23.3-11.8s-29,8.7-29,26.4
+                  s16,25,29.9,25s22.3-5.9,22.3-5.9v-19.1h-20.7v4.4l8.4,0v12.8c0,0-2.1,2.6-8.1,2.6c-8.6,0-18.3-5.9-18.3-20S96.2,81.5,103.8,81.5
+                  L103.8,81.5z"></path>
+            <path class="st0" d="M163.5,75.3c-17.4,0-28.1,11.6-28.1,25.1c0,15,10.1,26.5,28.1,26.5s28.1-11.5,28.1-26.5
+                  C191.6,86.9,180.8,75.3,163.5,75.3z M163.5,122.5c-10.4,0-14.5-8.9-14.5-22.1s5.5-20.7,14.5-20.7s14.5,7.5,14.5,20.7
+                  S173.9,122.5,163.5,122.5z"></path>
+          </g>
+          <path class="st1" d="M104.5,197.5c-25.5,0-49.7-9.9-68.2-28.1C17.6,151.1,7.2,126.7,7,100.9C6.7,75,16.7,50.5,35,31.8
+                C53.4,13.1,77.7,2.7,103.6,2.5c0.3,0,0.6,0,0.9,0c38,0,72.7,22.2,88.6,56.7l-4.7,2.2c-15.2-33-48.4-54.1-84.7-53.8
+                c-50.9,0.5-92,42.3-91.5,93.2c0.2,24.5,10.1,47.6,27.8,64.9s40.9,26.8,65.4,26.6c33.4-0.3,64.2-18.7,80.2-48l4.5,2.5
+                c-16.9,31-49.4,50.4-84.7,50.7C105,197.5,104.7,197.5,104.5,197.5L104.5,197.5z"></path>
+        </svg>
+      </div>
+    </header>
+    <section class="content">
+      <table id="FT-OPE-03-table-dispatchers">
+        <thead>
+          <tr>
+            <th>CONCEPTO</th>
+            <th>Dispensario 1</th>
+            <th>Dispensario 2</th>
+            <th>Dispensario 3</th>
+            <th>Dispensario 4</th>
+            <th>Dispensario 5</th>
+            <th>Dispensario 6</th>
+            <th>Dispensario 7</th>
+            <th>Dispensario 8</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Marca</td>
+            <td id="FT-OPE-03-table-dispatchers-r1c2">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r1c3">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r1c4">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r1c5">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r1c6">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r1c7">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r1c8">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r1c9">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>Modelo</td>
+            <td id="FT-OPE-03-table-dispatchers-r2c2">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r2c3">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r2c4">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r2c5">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r2c6">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r2c7">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r2c8">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r2c9">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>No. de serie</td>
+            <td id="FT-OPE-03-table-dispatchers-r3c2">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r3c3">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r3c4">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r3c5">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r3c6">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r3c7">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r3c8">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r3c9">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>No. Aprobación</td>
+            <td id="FT-OPE-03-table-dispatchers-r4c2">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r4c3">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r4c4">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r4c5">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r4c6">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r4c7">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r4c8">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-dispatchers-r4c9">
+              <textarea disabled rows="1" cols="15" maxlength="10"></textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table id="FT-OPE-03-table-price-changes">
+        <thead>
+          <tr>
+            <th rowspan="2">FECHA</th>
+            <th rowspan="2">HORA</th>
+            <th colspan="3">PRECIO ($)</th>
+            <th rowspan="2">FOLIO CRE</th>
+            <th style="width: 250px;" rowspan="2">NOMBRE DE QUIEN VERIFICA EN CAMPO</th>
+          </tr>
+          <tr>
+            <th>Regular</th>
+            <th>Prémium</th>
+            <th>Diésel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r1c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r1c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r1c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r1c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r1c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r1c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r1c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r2c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r2c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r2c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r2c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r2c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r2c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r2c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r3c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r3c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r3c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r3c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r3c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r3c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r3c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r4c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r4c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r4c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r4c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r4c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r4c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r4c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r5c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r5c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r5c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r5c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r5c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r5c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r5c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r6c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r6c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r6c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r6c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r6c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r6c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r6c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r7c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r7c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r7c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r7c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r7c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r7c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r7c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r8c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r8c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r8c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r8c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r8c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r8c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r8c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r9c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r9c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r9c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r9c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r9c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r9c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r9c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r10c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r10c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r10c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r10c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r10c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r10c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r10c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r11c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r11c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r11c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r11c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r11c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r11c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r11c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r12c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r12c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r12c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r12c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r12c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r12c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r12c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r13c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r13c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r13c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r13c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r13c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r13c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r13c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r14c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r14c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r14c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r14c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r14c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r14c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r14c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r15c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r15c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r15c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r15c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r15c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r15c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r15c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r16c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r16c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r16c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r16c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r16c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r16c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r16c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r17c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r17c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r17c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r17c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r17c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r17c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r17c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r18c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r18c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r18c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r18c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r18c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r18c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r18c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r19c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r19c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r19c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r19c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r19c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r19c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r19c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r20c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r20c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r20c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r20c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r20c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r20c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r20c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r21c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r21c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r21c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r21c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r21c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r21c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r21c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r22c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r22c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r22c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r22c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r22c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r22c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r22c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r23c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r23c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r23c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r23c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r23c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r23c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r23c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-changes-r24c1">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r24c2">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r24c3">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r24c4">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r24c5">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r24c6">
+              <textarea disabled rows="1" maxlength="10"></textarea>
+            </td>
+            <td id="FT-OPE-03-table-price-changes-r24c7">
+              <textarea disabled rows="1"></textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <section class="sign-section">
+        <div class="sign-container">
+          <img class="sign" src="" alt="Click para firmar">
+          <input type="text" placeholder="Escriba su nombre aquí" id="FT-OPE-03-ti-01">
+          <p>Nombre y firma</p>
+        </div>
+      </section>
+
+      <section class="footer">
+        <div class="footer-data-left">
+          <div>
+            <p>Clave</p>
+            <p>FT-OPE-03</p>
+          </div>
+          <div>
+            <p>No. de Revisión</p>
+            <p>02</p>
+          </div>
+          <div>
+            <p>Vigente desde:</p>
+            <p>01/10/2024</p>
+          </div>
+        </div>
+        <div class="footer-data-right">
+          <p>Página 1 de 2</p>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <div class="page">
+    <header>
+      <div class="logo-container">
+        <img src="" class="station-logo">
+      </div>
+      <article class="h-data">
+        <input class="station-name" disabled />
+        <input class="station-address" disabled />
+        <input class="station-permit" disabled />
+        <p class="doc-title">CAMBIO DE PRECIOS</p>
+      </article>
+      <div class="logo-container">
+        <svg version="1.1" id="SGO" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px" y="0px" viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
+          <style type="text/css">
+            .st0 {
+              fill: #0276C7;
+            }
+
+            .st1 {
+              fill: #7F7F7F;
+            }
+          </style>
+          <g>
+            <path class="st0" d="M44.5,80.1c2.7,0,8.6,0.3,11.2,8.8h7.7c0-4.4-6.5-13.4-18.1-13.4c-7,0-19.3,2.3-19.3,14.1
+                  c0,13.7,26.4,14.3,26.4,25.7c0,4-4.2,6.3-7.8,6.3s-10.7-2.2-10.7-8.8h-8.7c0,5.4,4.6,14,19.5,14c14.1,0,18.8-8.2,18.8-14.5
+                  c0-13.3-27.1-15.3-27.1-25.5C36.4,81,41.8,80,44.5,80.1L44.5,80.1z"></path>
+            <path class="st0" d="M103.8,81.5c7.2,0,12.9,5.5,16.2,10.4c0,0,3.3-3.1,4.9-4.8c-2.3-2.9-9.4-11.8-23.3-11.8s-29,8.7-29,26.4
+                  s16,25,29.9,25s22.3-5.9,22.3-5.9v-19.1h-20.7v4.4l8.4,0v12.8c0,0-2.1,2.6-8.1,2.6c-8.6,0-18.3-5.9-18.3-20S96.2,81.5,103.8,81.5
+                  L103.8,81.5z"></path>
+            <path class="st0" d="M163.5,75.3c-17.4,0-28.1,11.6-28.1,25.1c0,15,10.1,26.5,28.1,26.5s28.1-11.5,28.1-26.5
+                  C191.6,86.9,180.8,75.3,163.5,75.3z M163.5,122.5c-10.4,0-14.5-8.9-14.5-22.1s5.5-20.7,14.5-20.7s14.5,7.5,14.5,20.7
+                  S173.9,122.5,163.5,122.5z"></path>
+          </g>
+          <path class="st1" d="M104.5,197.5c-25.5,0-49.7-9.9-68.2-28.1C17.6,151.1,7.2,126.7,7,100.9C6.7,75,16.7,50.5,35,31.8
+                C53.4,13.1,77.7,2.7,103.6,2.5c0.3,0,0.6,0,0.9,0c38,0,72.7,22.2,88.6,56.7l-4.7,2.2c-15.2-33-48.4-54.1-84.7-53.8
+                c-50.9,0.5-92,42.3-91.5,93.2c0.2,24.5,10.1,47.6,27.8,64.9s40.9,26.8,65.4,26.6c33.4-0.3,64.2-18.7,80.2-48l4.5,2.5
+                c-16.9,31-49.4,50.4-84.7,50.7C105,197.5,104.7,197.5,104.5,197.5L104.5,197.5z"></path>
+        </svg>
+      </div>
+    </header>
+
+    <section class="content">
+      <table id="FT-OPE-03-table-price-change-log">
+        <thead>
+          <tr>
+            <th style="width: 70px;">DISPENSARIO</th>
+            <th style="width: 50px;">LADO</th>
+            <th>NO. DE SERIE DEL MEDIDOR</th>
+            <th>PRODUCTO</th>
+            <th style="width: 120px">TAG</th>
+            <th>FECHA Y HORA</th>
+            <th>FOLIO DE LA CRE</th>
+            <th style="width: 160px;">FORMATO DEL EVENTO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r1c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r1c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r1c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r1c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r1c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r1c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r1c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r1c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r2c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r2c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r2c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r2c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r2c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r2c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r2c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r2c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r3c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r3c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r3c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r3c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r3c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r3c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r3c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r3c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r4c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r4c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r4c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r4c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r4c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r4c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r4c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r4c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r5c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r5c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r5c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r5c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r5c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r5c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r5c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r5c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r6c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r6c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r6c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r6c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r6c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r6c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r6c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r6c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r7c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r7c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r7c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r7c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r7c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r7c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r7c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r7c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r8c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r8c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r8c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r8c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r8c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r8c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r8c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r8c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r9c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r9c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r9c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r9c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r9c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r9c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r9c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r9c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r10c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r10c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r10c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r10c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r10c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r10c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r10c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r10c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r11c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r11c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r11c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r11c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r11c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r11c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r11c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r11c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r12c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r12c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r12c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r12c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r12c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r12c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r12c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r12c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r13c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r13c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r13c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r13c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r13c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r13c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r13c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r13c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r14c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r14c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r14c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r14c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r14c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r14c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r14c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r14c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r15c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r15c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r15c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r15c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r15c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r15c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r15c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r15c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r16c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r16c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r16c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r16c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r16c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r16c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r16c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r16c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r17c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r17c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r17c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r17c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r17c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r17c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r17c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r17c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r18c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r18c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r18c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r18c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r18c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r18c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r18c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r18c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r19c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r19c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r19c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r19c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r19c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r19c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r19c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r19c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r20c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r20c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r20c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r20c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r20c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r20c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r20c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r20c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r21c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r21c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r21c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r21c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r21c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r21c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r21c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r21c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r22c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r22c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r22c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r22c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r22c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r22c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r22c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r22c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r23c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r23c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r23c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r23c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r23c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r23c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r23c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r23c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r24c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r24c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r24c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r24c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r24c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r24c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r24c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r24c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r25c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r25c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r25c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r25c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r25c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r25c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r25c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r25c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r26c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r26c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r26c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r26c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r26c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r26c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r26c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r26c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r27c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r27c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r27c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r27c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r27c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r27c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r27c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r27c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r28c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r28c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r28c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r28c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r28c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r28c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r28c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r28c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r29c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r29c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r29c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r29c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r29c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r29c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r29c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r29c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r30c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r30c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r30c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r30c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r30c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r30c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r30c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r30c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r31c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r31c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r31c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r31c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r31c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r31c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r31c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r31c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r32c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r32c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r32c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r32c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r32c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r32c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r32c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r32c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r33c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r33c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r33c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r33c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r33c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r33c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r33c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r33c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r34c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r34c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r34c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r34c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r34c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r34c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r34c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r34c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r35c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r35c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r35c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r35c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r35c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r35c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r35c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r35c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r36c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r36c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r36c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r36c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r36c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r36c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r36c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r36c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r37c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r37c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r37c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r37c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r37c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r37c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r37c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r37c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td id="FT-OPE-03-table-price-change-log-r38c1"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r38c2"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r38c3"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r38c4"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r38c5"><textarea disabled rows="1" cols="15"
+                maxlength="17"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r38c6"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r38c7"><textarea disabled rows="1" cols="15"
+                maxlength="15"></textarea></td>
+            <td id="FT-OPE-03-table-price-change-log-r38c8"><textarea disabled rows="1" cols="15"></textarea></td>
+          </tr>
+        </tbody>
+      </table>
+      <section class="footer">
+        <div class="footer-data-left">
+          <div>
+            <p>Clave</p>
+            <p>FT-OPE-03</p>
+          </div>
+          <div>
+            <p>No. de Revisión</p>
+            <p>02</p>
+          </div>
+          <div>
+            <p>Vigente desde:</p>
+            <p>01/10/2024</p>
+          </div>
+        </div>
+        <div class="footer-data-right">
+          <p>Página 2 de 2</p>
+        </div>
+      </section>
+    </section>
+  </div>
+</body>
+
+</html>
